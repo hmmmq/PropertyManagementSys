@@ -93,6 +93,12 @@ export default {
 
                 if (res.data) {
                     alert('新增车辆成功');
+                    this.car = {
+                        id: '',
+                        userid: this.user.id,
+                        type: '',
+                        number: ''
+                    };
 
 
                 } else {

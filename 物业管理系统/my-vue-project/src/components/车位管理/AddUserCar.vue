@@ -90,6 +90,12 @@ export default {
 
                 if (res.data != '' && res.data != false) {
                     alert('新增车辆成功');
+                    this.car = {
+                        id: '',
+                        userid: '',
+                        type: '',
+                        number: ''
+                    };
                 } else {
                     alert('新增车辆失败,请检查车辆ID是否已存在');
                 }

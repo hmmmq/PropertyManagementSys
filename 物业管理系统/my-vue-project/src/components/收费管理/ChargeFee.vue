@@ -102,6 +102,14 @@ export default {
 
                 if (res.data != '' && res.status == 200) {
                     alert('新增收费成功');
+                    this.bill = {
+                        id: '',
+                        userid: '',
+                        type: '',
+                        amount: '',
+                        deadline: '',
+                        status: '未缴费'
+                    };
                 } else {
                     alert('新增收费失败,请检查收费ID是否已存在');
 

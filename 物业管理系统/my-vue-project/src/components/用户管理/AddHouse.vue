@@ -48,9 +48,9 @@
                             <div class="form-group">
                                 <label>房屋状态</label>
                                 <select class="form-control" v-model="house.status">
-                                    <option value="良好">良好</option>
-                                    <option value="一般">一般</option>
-                                    <option value="较差">较差</option>
+                                    <option value="空闲">空闲</option>
+                                    <option value="已出售">已出售</option>
+                                    <option value="已租赁">已租赁</option>
                                 </select>
                             </div>
 
@@ -106,6 +106,14 @@ export default {
 
                 if (res.data) {
                     alert('新增房屋成功');
+                    this.house = {
+                        id: '',
+                        ownerid: '',
+                        type: '',
+                        area: '',
+                        address: '',
+                        status: ''
+                    };
 
 
 

@@ -117,6 +117,17 @@ export default {
                     // console.log(res.data);
                     // this.$router.push('/user/list');
                     alert('新增用户成功');
+                    this.user = {
+                        id: '',
+                        password: '',
+                        name: '',
+                        age: '',
+                        position: '',
+                        phone: '',
+                        email: '',
+                        gender: '',
+                        type: false
+                    };
                 } else {
                     alert('新增用户失败,请检查用户ID是否已存在');
                 }

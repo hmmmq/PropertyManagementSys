@@ -106,6 +106,15 @@ export default {
 
                 if (res.data != '' && res.status == 200) {
                     alert('新增报修成功');
+                    this.fix = {
+                        id: '',
+                        userid: this.user.id,
+                        type: '',
+                        amount: '',
+                        deadline: '',
+                        status: '未处理'
+                    };
+
 
 
 
