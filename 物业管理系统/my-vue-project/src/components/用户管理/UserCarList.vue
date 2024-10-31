@@ -17,6 +17,9 @@
                 @click="addcar = true">登记车辆</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
+            <edit-car :initialcar="initialcar" v-if="this.initialcar.id != ''"
+                @data-back-car="handleDataBack"></edit-car>
+
             <div class="row">
                 <div class="col-lg-10" style="align-items: center;" v-show="addcar">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
@@ -59,7 +62,7 @@ import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
 import AddUserCar from './AddUserCar.vue';
-
+import EditCar from './EditCar.vue';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
     Roboto: {
@@ -78,7 +81,9 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        AddUserCar
+        AddUserCar,
+        EditCar
+
     },
     data() {
         return {
@@ -88,12 +93,25 @@ export default {
             carlist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
+            initialcar: {
+                id: '',
+                userid: '',
+                type: '',
+                number: ''
+            }
         }
     },
 
     watch: {
     },
     methods: {
+        handleDataBack(data) {
+            console.log('回传的数据:', data);
+            // 处理回传的数据
+            if (data) {
+                this.initialcar.id = '';
+            }
+        },
         async updatelist() {
             await this.destoryDataTable();
             this.initializeDataTable();
@@ -191,17 +209,24 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example114 tbody').on('click', '.edit-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
+                        $('#example114 tbody').on('click', '.edit-btn', (event) => {
+                            var data = $(event.currentTarget).val();
+                            console.log('编辑数据:', data);
+                            console.log('数据:', this.initialcar);
+                            axios.get('http://localhost:8086/car/' + data).then(res => {
+                                this.initialcar = res.data;
+                            });
 
-                            // 在这里添加编辑逻辑
                         });
-
-                        $('#example114 tbody').on('click', '.delete-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
-                            // 在这里添加删除逻辑
+                        $('#example114 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/car/' + $(event.currentTarget).val()).then(res => {
+                                if (res.data) {
+                                    console.log('删除成功');
+                                    alert('删除成功');
+                                } else {
+                                    console.error('删除失败');
+                                }
+                            });
                         });
                         console.log("table.buttons().container().appendTo(#example_wrapper.col-md-6:eq(0));");
                         table
