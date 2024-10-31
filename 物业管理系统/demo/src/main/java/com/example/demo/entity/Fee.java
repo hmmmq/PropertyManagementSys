@@ -28,4 +28,5 @@ public class Fee implements Serializable {
     private Integer amount;
 
     private LocalDateTime deadline;
+    private  String status;
 }

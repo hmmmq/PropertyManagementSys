@@ -17,6 +17,8 @@
                 @click="addbill = true">新增收费</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
+            <fee-edit :initialfee="initialfee" v-if="this.initialfee.id != ''"
+                @data-back-fee="handleDataBack"></fee-edit>
             <div class="row">
                 <div class="col-lg-10" style="align-items: center;" v-show="addbill">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
@@ -58,6 +60,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
+import FeeEdit from './FeeEdit.vue';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
@@ -77,7 +80,8 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        ChargeFee
+        ChargeFee,
+        FeeEdit
     },
     data() {
         return {
@@ -87,12 +91,27 @@ export default {
             billlist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
+            initialfee: {
+                id: '',
+                userid: '',
+                type: '',
+                amount: '',
+                deadline: '',
+                status: ''
+            }
         }
     },
 
     watch: {
     },
     methods: {
+        handleDataBack(data) {
+            console.log('回传的数据:', data);
+            // 处理回传的数据
+            if (data) {
+                this.initialfee.id = '';
+            }
+        },
         async updatelist() {
             await this.destoryDataTable();
             this.initializeDataTable();
@@ -119,8 +138,6 @@ export default {
                 item.deadline,
                 item.status,
                 item.id// 占位符，用于操作列
-
-
             ]);
         },
         async initializeDataTable() {
@@ -167,6 +184,7 @@ export default {
                                 { title: '收费类型' },
                                 { title: '收费金额(元)' },
                                 { title: '收费期限' },
+                                { title: '收费状态' },
 
                                 {
                                     title: '操作',
@@ -192,17 +210,25 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example112 tbody').on('click', '.edit-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
+                        $('#example112 tbody').on('click', '.edit-btn', (event) => {
+                            var data = $(event.currentTarget).val();
+                            console.log('编辑数据:', data);
+                            console.log('数据:', this.initialfee);
+                            axios.get('http://localhost:8086/fee/' + data).then(res => {
+                                this.initialfee = res.data;
+                            });
 
-                            // 在这里添加编辑逻辑
                         });
 
-                        $('#example112 tbody').on('click', '.delete-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
-                            // 在这里添加删除逻辑
+                        $('#example112 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/fee/' + $(event.currentTarget).val()).then(res => {
+                                if (res.data) {
+                                    console.log('删除成功');
+                                    alert('删除成功');
+                                } else {
+                                    console.error('删除失败');
+                                }
+                            });
                         });
                         console.log("table.buttons().container().appendTo(#example_wrapper.col-md-6:eq(0));");
                         table
