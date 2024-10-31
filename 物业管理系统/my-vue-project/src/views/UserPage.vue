@@ -3,13 +3,13 @@
         <SideNav @select-option="handleOptionSelect" />
         <NavHeader @select-option="handleOptionSelect" />
         <WelcomePanel v-show="currentComponent === 'WelcomePanel'"></WelcomePanel>
-        <UserFixList v-if="currentComponent === 'UserFixList'"></UserFixList>
-        <PersonInfo v-if="currentComponent === 'PersonInfo'"></PersonInfo>
-        <HouseList v-if="currentComponent === 'HouseList'"></HouseList>
-        <FeeList v-if="currentComponent === 'FeeList'"></FeeList>
-        <CarList v-if="currentComponent === 'CarList'"></CarList>
-        <FixList v-if="currentComponent === 'FixList'"></FixList>
-        <UserList v-if="currentComponent === 'UserList'"></UserList>
+        <UserFixList v-show="currentComponent === 'UserFixList'"></UserFixList>
+        <PersonInfo v-show="currentComponent === 'PersonInfo'"></PersonInfo>
+        <HouseList v-show="currentComponent === 'HouseList'"></HouseList>
+        <FeeList v-show="currentComponent === 'FeeList'"></FeeList>
+        <CarList v-show="currentComponent === 'CarList'"></CarList>
+        <FixList v-show="currentComponent === 'FixList'"></FixList>
+        <UserList v-show="currentComponent === 'UserList'"></UserList>
 
     </div>
 
@@ -35,7 +35,6 @@ export default {
         HouseList,
         FeeList,
         CarList,
-        // UserCarList,
         FixList,
         UserFixList
     },

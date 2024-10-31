@@ -36,7 +36,7 @@
                         <div class="card-body">
 
                             <div class="table-responsive">
-                                <table id="example114" class="table table-bordered">
+                                <table id="example115" class="table table-bordered">
                                 </table>
                             </div>
                         </div>
@@ -102,6 +102,7 @@ export default {
 
     watch: {
     },
+
     methods: {
         handleDataBack(data) {
             console.log('回传的数据:', data);
@@ -142,7 +143,7 @@ export default {
             console.log("initializeDataTable");
             var carlist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example114')) {
+                if (!$.fn.DataTable.isDataTable('#example115')) {
 
 
                     try {
@@ -160,8 +161,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example114').DataTable({");
-                        var table = $('#example114').DataTable({
+                        console.log(" var table = $('#example115').DataTable({");
+                        var table = $('#example115').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -205,7 +206,7 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example114 tbody').on('click', '.edit-btn', (event) => {
+                        $('#example115 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
                             console.log('数据:', this.initialcar);
@@ -214,7 +215,7 @@ export default {
                             });
 
                         });
-                        $('#example114 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                        $('#example115 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
                             axios.delete('http://localhost:8086/car/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
@@ -261,9 +262,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example114')) {
+                if ($.fn.DataTable.isDataTable('#example115')) {
                     console.log("destoryDataTable");
-                    $('#example114').DataTable().destroy();
+                    $('#example115').DataTable().destroy();
                 }
             });
         }

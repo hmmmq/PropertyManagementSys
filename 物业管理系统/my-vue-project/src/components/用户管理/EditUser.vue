@@ -22,7 +22,8 @@
                         <form>
                             <div class="form-group">
                                 <label>用户ID(作为登录账号使用)</label>
-                                <input type="number" class="form-control" placeholder="请填写用户ID" v-model="user.id">
+                                <input type="number" class="form-control" placeholder="请填写用户ID" v-model="user.id"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label>用户密码</label>
