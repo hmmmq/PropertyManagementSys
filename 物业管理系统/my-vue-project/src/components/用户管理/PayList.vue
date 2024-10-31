@@ -159,12 +159,14 @@ export default {
                                 { title: '收费类型' },
                                 { title: '收费金额(元)' },
                                 { title: '收费期限' },
+                                { title: '收费状态' },
+
 
                                 {
                                     title: '操作',
                                     render: function (data) {
                                         return `
-                                         <button class="edit-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>缴费</button>
+                                         <button class="pay-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>缴费</button>
  
                                         `;
                                     }
@@ -184,9 +186,49 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example119 tbody').on('click', '.edit-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
+                        $('#example119 tbody').on('click', '.pay-btn', (event) => {
+                            var feeid = $(event.target).val();
+                            var fee = null;
+                            var money = 0;
+                            axios.get('http://localhost:8086/fee/' + feeid).then(res => {
+                                console.log(res.data);
+                                if (res.data != null) {
+                                    fee = res.data;
+                                    if (fee?.status === '已缴费') {
+                                        alert('该账单已缴费');
+                                        return;
+                                    }
+                                    money = fee.amount;
+                                    console.log(money);
+                                    var user = JSON.parse(localStorage.getItem('user'));
+                                    if (user.balance < money) {
+                                        alert('余额不足，请充值');
+                                        return;
+                                    }
+                                    user.balance = user.balance - money;
+
+                                    axios.put('http://localhost:8086/user/' + user.id, user).then(res => {
+                                        if (res.data) {
+                                            fee.status = '已缴费';
+                                            axios.put('http://localhost:8086/fee/' + feeid, fee).then(res => {
+                                                if (res.data) {
+                                                    alert('缴费成功');
+                                                    localStorage.setItem('user', JSON.stringify(user));
+                                                } else {
+                                                    alert('缴费失败');
+                                                }
+                                            });
+                                        } else {
+                                            alert('缴费失败');
+                                        }
+                                    });
+
+                                } else {
+                                    alert('该账单不存在');
+                                    return;
+                                }
+                            });
+
 
                             // 在这里添加编辑逻辑
                         });

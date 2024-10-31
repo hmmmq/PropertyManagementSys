@@ -33,4 +33,5 @@ public class User implements Serializable {
     private Boolean type;
 
     private String email;
+    private Integer balance;
 }

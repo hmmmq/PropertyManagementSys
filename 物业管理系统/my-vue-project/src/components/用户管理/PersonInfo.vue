@@ -24,14 +24,16 @@
                                 <span>查看车位</span> </button>
                             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                                 @click="userUserHouseList = true">查看住房</button>
-                            <button type="button"
-                                class="btn btn-outline-dark waves-effect waves-light m-1">充值缴费</button>
+                            <button type="button" class="btn btn-outline-dark waves-effect waves-light m-1"
+                                @click="pay = true">充值缴费</button>
                         </div>
                     </div>
 
                     <div class="card-body" v-show="personinfo">
                         <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
                             @click="personinfo = false">收起面板</button>
+                        <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
+                            @click="updateperson">刷新</button>
                         <div class="card-content p-2">
                             <div class="text-center">
                                 <img src="http://127.0.0.1:8083/images/logo-icon.png" alt="logo icon">
@@ -59,6 +61,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="exampleInputName" class=""> 账户余额 </label>
+                                    <div class="position-relative has-icon-right">
+                                        <label class="">{{ user?.balance }}</label>
+                                        <div class="form-control-position">
+                                            <i class="icon-user"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="form-group">
                                     <label for="exampleInputEmailId" class="">邮箱</label>
@@ -124,6 +136,24 @@
                         <UserHouseList class="col-lg-12"></UserHouseList>
 
                     </div>
+                    <div v-show="pay" class="row">
+                        <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
+                            @click="pay = false">收起面板</button>
+                        <div class="card-body col-lg-12">
+                            <form>
+                                <div class="form-group">
+                                    <label>充值金额</label>
+                                    <input type="number" class="form-control" placeholder="请填写充值金额" v-if="user"
+                                        v-model="money">
+                                    <br>
+                                    <button type="button" @click="paymoney"
+                                        class="btn btn-primary shadow-primary px-5 col-lg-12">
+                                        <i class="icon-lock"></i>提交</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
 
 
@@ -157,6 +187,18 @@ export default {
             localStorage.removeItem('user');
             this.$router.push('/login');
         },
+        paymoney() {
+            this.user.balance += this.money;
+            axios.put("http://localhost:8086/user/" + this.user.id, this.user).then(res => {
+                if (res.data) {
+                    alert("充值成功!");
+                    this.pay = false;
+                } else {
+                    alert("充值失败.");
+
+                }
+            });
+        },
         submitpersoninfo() {
 
             axios.put("http://localhost:8086/user/" + this.user.id, this.user).then(res => {
@@ -168,6 +210,10 @@ export default {
 
                 }
             });
+        },
+        updateperson() {
+            console.log('User get from localStorage in PersonInfo:', this.user);
+            this.user = JSON.parse(localStorage.getItem('user'));
         }
     },
     data() {
@@ -177,13 +223,16 @@ export default {
             personinfo: false,
             paylist: false,
             usercarlist: false,
-            userUserHouseList: false
+            userUserHouseList: false,
+            pay: false,
+            money: 0
         }
     },
     mounted() {
         this.user = JSON.parse(localStorage.getItem('user'));
         console.log('User get from localStorage in PersonInfo:', this.user);
-    }
+    },
+
 
 }
 </script>
