@@ -17,6 +17,8 @@
                 @click="addauser = true">新增业主信息</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
+            <edit-user :initialuser="initialuser" v-if="this.initialuser.id != ''"
+                @data-back-user="handleDataBack"></edit-user>
             <div class="row">
                 <div class="col-lg-10" style="align-items: center;" v-show="addauser">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
@@ -60,7 +62,7 @@ import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
 import AddUser from './AddUser.vue';
-
+import EditUser from './EditUser.vue';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
@@ -80,7 +82,8 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        AddUser
+        AddUser,
+        EditUser
     },
     data() {
         return {
@@ -90,12 +93,29 @@ export default {
             userlist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
+            initialuser: {
+                id: '',
+                name: '',
+                phone: '',
+                age: '',
+                email: '',
+                gender: '',
+                password: '',
+                type: ''
+            }
         }
     },
 
     watch: {
     },
     methods: {
+        handleDataBack(data) {
+            console.log('回传的数据:', data);
+            // 处理回传的数据
+            if (data) {
+                this.initialuser.id = '';
+            }
+        },
         async updatelist() {
             await this.destoryDataTable();
             this.initializeDataTable();
@@ -191,19 +211,26 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example9 tbody').on('click', '.edit-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
+                        $('#example9 tbody').on('click', '.edit-btn', (event) => {
+                            var data = $(event.currentTarget).val();
+                            console.log('编辑数据:', data);
+                            console.log('数据:', this.initialuser);
+                            axios.get('http://localhost:8086/user/' + data).then(res => {
+                                this.initialuser = res.data;
+                            });
 
-                            // 在这里添加编辑逻辑
                         });
 
 
-
-                        $('#example9 tbody').on('click', '.delete-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
-                            // 在这里添加删除逻辑
+                        $('#example9 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/user/' + $(event.currentTarget).val()).then(res => {
+                                if (res.data) {
+                                    console.log('删除成功');
+                                    alert('删除成功');
+                                } else {
+                                    console.error('删除失败');
+                                }
+                            });
                         });
                         console.log("table.buttons().container().appendTo(#example_wrapper.col-md-6:eq(0));");
                         table
