@@ -22,7 +22,8 @@
                         <form>
                             <div class="form-group">
                                 <label>车辆ID</label>
-                                <input type="number" class="form-control" placeholder="请填写车辆ID" v-model="car.id">
+                                <input type="number" class="form-control" placeholder="请填写车辆ID" v-model="car.id"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label>车辆用户ID</label>
