@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Fix;
+import com.example.demo.entity.User;
 import com.example.demo.service.IFixService;
+import com.example.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +23,14 @@ public class FixController {
 
     @Autowired
     private IFixService fixService;
+    @Autowired
+    private IUserService userService;
 
     // Create a new fix
     @PostMapping
     public boolean createFix(@RequestBody Fix fix) {
+        User user = userService.getById(fix.getUserid());
+        fix.setPhone(user.getPhone());
         return fixService.save(fix);
     }
 
@@ -51,6 +57,12 @@ public class FixController {
     @PutMapping("/{id}")
     public boolean updateFix(@PathVariable Integer id, @RequestBody Fix fix) {
         fix.setId(id);
+        return fixService.updateById(fix);
+    }
+    @PutMapping("/process/{id}")
+    public boolean updateFixprocess(@PathVariable Integer id) {
+        Fix fix = fixService.getById(id);
+        fix.setStatus("已处理");
         return fixService.updateById(fix);
     }
 

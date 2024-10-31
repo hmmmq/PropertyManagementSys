@@ -30,4 +30,6 @@ public class Fix implements Serializable {
     private LocalDateTime deadline;
 
     private String status;
+
+    private String phone;
 }
