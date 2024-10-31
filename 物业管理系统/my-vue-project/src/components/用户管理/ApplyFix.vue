@@ -11,23 +11,20 @@
                     </ol>
                 </div>
             </div>
-            <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
-                @click="cancel">取消修改</button>
             <!-- End Breadcrumb-->
             <div class="row justify-content-center">
                 <div class="card col-lg-12">
                     <div class="card-body">
-                        <div class="card-title text-primary">修改报修</div>
+                        <div class="card-title text-primary">新增报修</div>
                         <hr>
                         <form>
                             <div class="form-group">
                                 <label>报修ID</label>
-                                <input type="text" class="form-control" placeholder="请填写报修ID" v-model="fix.id" disabled>
+                                <input type="text" class="form-control" placeholder="请填写报修ID" v-model="fix.id">
                             </div>
                             <div class="form-group">
                                 <label>报修用户ID</label>
-                                <input type="text" class="form-control" placeholder="报修用户ID" v-model="fix.userid"
-                                    disabled>
+                                <input type="text" class="form-control" placeholder="报修用户ID" v-model="fix.userid">
                             </div>
                             <div class="form-group">
                                 <label>报修类型</label>
@@ -69,29 +66,20 @@
 <script scoped>
 import axios from 'axios';
 export default {
-    props: {
-        initialfix: {
-            type: Object,
-            required: true
-        }
-    },
     data() {
         return {
             fix: {
-                id: this.initialfix.id || '',
-                userid: this.initialfix.userid || '',
-                type: this.initialfix.type || '',
-                amount: this.initialfix.amount || '',
-                deadline: this.initialfix.deadline || '',
-                status: this.initialfix.status || '未处理'
+                id: '',
+                userid: '',
+                type: '',
+                amount: '',
+                deadline: '',
+                status: '未处理'
             },
             URL: 'http://localhost:8086/fix/'
         }
     },
     methods: {
-        cancel() {
-            this.$emit('data-back-fix', true);
-        },
         checknullvalue() {
             if (this.fix.id == '' || this.fix.userid == '' || this.fix.type == '' || this.fix.amount == '' || this.fix.deadline == '') {
                 alert('请填写完整信息');
@@ -108,14 +96,11 @@ export default {
 
             // 将 date 格式转换为 LocalDateTime 格式
             let date = new Date(this.fix.deadline);
-            this.fix.deadline = date.toISOString().replace('Z', '');
-            this.URL = this.URL + this.fix.id;
-
-            axios.put(this.URL, this.fix).then(res => {
+            this.fix.deadline = date.toISOString().slice(0, 19);
+            axios.post(this.URL, this.fix).then(res => {
 
                 if (res.data != '' && res.status == 200) {
-                    alert('修改报修成功');
-
+                    alert('新增报修成功');
                     this.fix = {
                         id: '',
                         userid: '',
@@ -124,9 +109,14 @@ export default {
                         deadline: '',
                         status: '未处理'
                     };
-                    this.$emit('data-back-fix', true);
+
+
+
                 } else {
-                    alert('修改报修失败,请检查报修ID是否已存在');
+                    alert('新增报修失败,请检查报修ID是否已存在');
+
+
+
                 }
             }).catch(err => {
                 console.error(err);

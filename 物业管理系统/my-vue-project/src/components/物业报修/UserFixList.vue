@@ -16,6 +16,8 @@
                 @click="addafix = true">新增报修</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
+            <fix-edit :initialfix="initialfix" v-if="this.initialfix.id != ''"
+                @data-back-fix="handleDataBack"></fix-edit>
             <div class="row">
                 <div class="col-lg-10" style="align-items: center;" v-show="addafix">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
@@ -54,6 +56,7 @@ import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
 import UserApplyFix from '@/components/物业报修/UserApplyFix.vue';
+import FixEdit from './FixEdit.vue';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
@@ -73,7 +76,8 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        UserApplyFix
+        UserApplyFix,
+        FixEdit
     },
     data() {
         return {
@@ -82,11 +86,26 @@ export default {
             fixlist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
+            initialfix: {
+                id: '',
+                userid: '',
+                type: '',
+                amount: '',
+                deadline: '',
+                status: ''
+            }
         }
     },
     watch: {
     },
     methods: {
+        handleDataBack(data) {
+            console.log('回传的数据:', data);
+            // 处理回传的数据
+            if (data) {
+                this.initialfix.id = '';
+            }
+        },
         async updatelist() {
             this.user = JSON.parse(localStorage.getItem('user'));
             if (!this.user) {
@@ -203,25 +222,27 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example120 tbody').on('click', '.edit-btn', function () {
-                            var id = $(this).val();
-                            if (!id) {
-                                console.warn('ID is null or undefined');
-                                return;
-                            }
-                            console.log(id);
-                            // 在这里添加编辑逻辑
+                        $('#example120 tbody').on('click', '.edit-btn', (event) => {
+                            var data = $(event.currentTarget).val();
+                            console.log('编辑数据:', data);
+                            console.log('数据:', this.initialfix);
+                            axios.get('http://localhost:8086/fix/' + data).then(res => {
+                                this.initialfix = res.data;
+                            });
+
                         });
 
-                        $('#example120 tbody').on('click', '.delete-btn', function () {
-                            var id = $(this).val();
-                            if (!id) {
-                                console.warn('ID is null or undefined');
-                                return;
-                            }
-                            console.log(id);
-                            // 在这里添加删除逻辑
+                        $('#example120 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/fix/' + $(event.currentTarget).val()).then(res => {
+                                if (res.data) {
+                                    console.log('删除成功');
+                                    alert('删除成功');
+                                } else {
+                                    console.error('删除失败');
+                                }
+                            });
                         });
+
                         console.log("table.buttons().container().appendTo(#example_wrapper.col-md-6:eq(0));");
                         table
                             .buttons()
