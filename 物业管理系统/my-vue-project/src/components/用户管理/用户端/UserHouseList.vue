@@ -6,7 +6,7 @@
                 <div class="col-sm-9">
                     <h4 class="page-title">房屋管理</h4>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">住房管理</li>
+                        <li class="breadcrumb-item">房屋管理</li>
                         <li class="breadcrumb-item active" aria-current="page">房屋管理</li>
                     </ol>
                 </div>
@@ -35,7 +35,7 @@
 
                             <div class="table-responsive">
                                 <div id="example_wrapper"></div>
-                                <table id="example111" class="table table-bordered">
+                                <table id="example118" class="table table-bordered">
 
                                 </table>
                             </div>
@@ -63,6 +63,7 @@ import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
 import EditHouse from './EditHouse.vue';
+
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
     Roboto: {
@@ -147,11 +148,10 @@ export default {
             console.log("initializeDataTable");
             var houselist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example111')) {
-
-
+                if (!$.fn.DataTable.isDataTable('#example118')) {
+                    this.user = JSON.parse(localStorage.getItem('user'));
                     try {
-                        const promise = await axios.get('http://localhost:8086/house/');
+                        const promise = await axios.get('http://localhost:8086/house/user/' + this.user.id);
                         if (promise.status === 200) {
                             console.log(promise.data);
                             houselist2d = this.convertTo2DArray(promise.data);
@@ -165,8 +165,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example111').DataTable({");
-                        var table = $('#example111').DataTable({
+                        console.log(" var table = $('#example118').DataTable({");
+                        var table = $('#example118').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -212,7 +212,7 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example111 tbody').on('click', '.edit-btn', (event) => {
+                        $('#example118 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
                             console.log('数据:', this.initialhouse);
@@ -221,8 +221,7 @@ export default {
                             });
 
                         });
-
-                        $('#example111 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                        $('#example118 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
                             axios.delete('http://localhost:8086/house/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
@@ -269,9 +268,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example111')) {
+                if ($.fn.DataTable.isDataTable('#example118')) {
                     console.log("destoryDataTable");
-                    $('#example111').DataTable().destroy();
+                    $('#example118').DataTable().destroy();
                 }
             });
         }

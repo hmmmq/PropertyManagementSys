@@ -26,10 +26,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row">
-
-
+                <!-- 选择是否为管理员 -->
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" v-model="user.type">
+                        <label class="custom-control-label" for="customCheck1">管理员登录</label>
+                    </div>
                 </div>
+
                 <button type="button" class="btn btn-primary shadow-primary btn-block waves-effect waves-light"
                     @click="Login">登录</button>
             </form>
@@ -53,8 +57,11 @@ export default {
                 phone: '',
                 email: '',
                 gender: '',
-                type: true
+                type: false
             },
+            userurl: 'http://localhost:8086/user/login',
+            adminurl: 'http://localhost:8086/admin/login',
+            url: ''
 
         }
     },
@@ -62,13 +69,19 @@ export default {
     methods: {
 
         Login() {
+            if (this.user.type) {
+                this.url = this.adminurl;
+            } else {
+                this.url = this.userurl;
+            }
+
 
             if (this.user.username == '' || this.user.password == '') {
                 alert('账号或密码不能为空');
                 return;
             }
 
-            axios.post('http://localhost:8086/user/login', this.user).then(res => {
+            axios.post(this.url, this.user).then(res => {
                 console.log(res);
                 if (res.status == 200 && res.data != '' && res.data != null) {
                     this.user = res.data;

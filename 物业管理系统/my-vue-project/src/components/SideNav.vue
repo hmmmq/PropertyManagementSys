@@ -17,7 +17,7 @@
             <li v-if="user?.type">
                 <a href="#" class="waves-effect">
                     <i class="zmdi zmdi-layers"></i>
-                    <span>住房管理</span> <i class="fa fa-angle-left pull-right"></i>
+                    <span>房屋管理</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="sidebar-submenu">
                     <li><a href="#" @click="selectOption('房屋信息管理')"> <i class=" zmdi zmdi-star-outline"></i>
@@ -45,12 +45,12 @@
             </li>
             <li v-if="user?.type">
                 <a href="#" class="waves-effect">
-                    <i class="zmdi zmdi-cloud-done"></i><span>车位管理</span><i class="fa fa-angle-left float-right"></i>
+                    <i class="zmdi zmdi-cloud-done"></i><span>车辆管理</span><i class="fa fa-angle-left float-right"></i>
                 </a>
                 <ul class="sidebar-submenu">
                     <li><a href="#" @click="selectOption('车辆管理')"><i class="zmdi zmdi-star-outline"></i>车辆管理</a>
                     </li>
-                    <li><a href="#" @click="selectOption('车位管理')"><i class="zmdi zmdi-star-outline"></i>车位管理</a>
+                    <li><a href="#" @click="selectOption('车辆管理')"><i class="zmdi zmdi-star-outline"></i>车辆管理</a>
                     </li>
 
                 </ul>

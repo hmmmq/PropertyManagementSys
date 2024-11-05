@@ -4,28 +4,30 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">住房管理</h4>
+                    <h4 class="page-title">房屋管理</h4>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">房屋信息管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">新增房屋信息</li>
+                        <li class="breadcrumb-item active" aria-current="page">修改房屋信息</li>
                     </ol>
                 </div>
             </div>
+            <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
+                @click="cancel">取消修改</button>
             <!-- End Breadcrumb-->
             <div class="row justify-content-center">
                 <div class="card col-lg-12">
                     <div class="card-body">
-                        <div class="card-title text-primary">新增房屋</div>
+                        <div class="card-title text-primary">修改房屋</div>
                         <hr>
                         <form>
                             <div class="form-group">
                                 <label>房屋ID</label>
-                                <input type="text" class="form-control" placeholder="请填写房屋ID" v-model="house.id">
+                                <input type="number" class="form-control" placeholder="请填写房屋ID" v-model="house.id"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label>房主ID</label>
-                                <input type="text" class="form-control" placeholder="请填写房主ID" v-model="house.ownerid"
-                                    disabled>
+                                <input type="number" class="form-control" placeholder="请填写房主ID" v-model="house.ownerid">
                             </div>
                             <div class="form-group">
                                 <label>房屋类型</label>
@@ -74,22 +76,33 @@
 <script scoped>
 import axios from 'axios';
 export default {
+    props: {
+        initialhouse: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             house: {
-                id: '',
-                ownerid: '',
-                type: '',
-                area: '',
-                address: '',
-                status: ''
+                id: this.initialhouse.id || null,
+                ownerid: this.initialhouse.ownerid || null,
+                type: this.initialhouse.type || '',
+                area: this.initialhouse.area || '',
+                address: this.initialhouse.address || '',
+                status: this.initialhouse.status || ''
             },
             URL: 'http://localhost:8086/house/'
         }
     },
     methods: {
+        cancel() {
+            this.$emit('data-back-house', true);
+        },
         checknullvalue() {
-            if (this.house.id == '' || this.house.area == '' || this.house.address == '' || this.house.type == '' || this.house.status == '') {
+            if (this.house.id == '' || this.house.area == ''
+                || this.house.address == '' || this.house.type == ''
+                || this.house.status == '') {
                 alert('请填写完整信息');
                 return false;
             }
@@ -101,37 +114,28 @@ export default {
             if (!check) {
                 return;
             }
+            this.URL = this.URL + this.house.id;
 
-            axios.post(this.URL, this.house).then(res => {
-
-                if (res.data) {
-                    alert('新增房屋成功');
+            axios.put(this.URL, this.house).then(res => {
+                if (res.data != '' && res.data) {
+                    alert('修改房屋成功');
                     this.house = {
-                        id: '',
-                        ownerid: '',
+                        id: null,
+                        ownerid: null,
                         type: '',
                         area: '',
                         address: '',
                         status: ''
                     };
-
-
-
+                    this.$emit('data-back-house', true);
                 } else {
-                    alert('新增房屋失败,请检查房屋ID是否已存在');
-
-
-
+                    alert('修改房屋失败,请检查房屋ID是否已存在');
                 }
             }).catch(err => {
+                console.log("submit err");
                 console.error(err);
             });
-
         }
-    },
-    mounted() {
-        var user = JSON.parse(localStorage.getItem('user'));
-        this.house.ownerid = user.id;
     }
 }
 </script>

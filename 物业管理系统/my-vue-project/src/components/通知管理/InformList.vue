@@ -4,26 +4,26 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">车辆管理</h4>
+                    <h4 class="page-title">通知管理</h4>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">车位管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">车辆管理</li>
+                        <li class="breadcrumb-item">通知管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">通知管理</li>
                     </ol>
                 </div>
 
             </div>
             <!-- End Breadcrumb-->
             <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                @click="addcar = true">登记车辆</button>
+                @click="addinform = true">登记通知</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
-            <car-edit :initialcar="initialcar" v-if="this.initialcar.id != ''"
-                @data-back-car="handleDataBack"></car-edit>
+            <inform-edit :initialinform="initialinform" v-if="this.initialinform.id != ''"
+                @data-back-inform="handleDataBack"></inform-edit>
             <div class="row">
-                <div class="col-lg-10" style="align-items: center;" v-show="addcar">
+                <div class="col-lg-10" style="align-items: center;" v-show="addinform">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                        @click="addcar = false">收起面板</button>
-                    <AddUserCar></AddUserCar>
+                        @click="addinform = false">收起面板</button>
+                    <AddUserInform></AddUserInform>
                 </div>
             </div>
 
@@ -31,9 +31,9 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header"><i class="fa fa-table"></i>车辆列表</div>
-                        <div class="card-body">
+                    <div class="informd">
+                        <div class="informd-header"><i class="fa fa-table"></i>通知列表</div>
+                        <div class="informd-body">
 
                             <div class="table-responsive">
                                 <table id="example115" class="table table-bordered">
@@ -60,8 +60,8 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
-import AddUserCar from './AddUserCar.vue';
-import CarEdit from './EditCar.vue';
+import AddUserInform from './AddUserInform.vue';
+import informEdit from './EditInform.vue';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
     Roboto: {
@@ -80,22 +80,23 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        AddUserCar,
-        CarEdit
+        AddUserInform,
+        informEdit
     },
     data() {
         return {
             user: null,
-            addcar: false,
-            addacar: false,
-            carlist: [], // 初始化为空数组
+            addinform: false,
+            addainform: false,
+            informlist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
-            initialcar: {
+            initialinform: {
                 id: '',
                 userid: '',
-                type: '',
-                number: ''
+                message: '',
+                informTime: '',
+                status: '未读'
             }
         }
     },
@@ -108,7 +109,7 @@ export default {
             console.log('回传的数据:', data);
             // 处理回传的数据
             if (data) {
-                this.initialcar.id = '';
+                this.initialinform.id = '';
             }
         },
         async updatelist() {
@@ -118,10 +119,10 @@ export default {
         },
         fetchData() {
             try {
-                const res = axios.get('http://localhost:8086/car/');
+                const res = axios.get('http://localhost:8086/inform/');
                 if (res.status === 200) {
-                    console.log('http://localhost:8086/car/');
-                    console.log('this.carlist = res.data;');
+                    console.log('http://localhost:8086/inform/');
+                    console.log('this.informlist = res.data;');
                 }
             } catch (err) {
                 console.error(err);
@@ -132,8 +133,9 @@ export default {
                 index + 1, // 添加索引列
                 item.id,
                 item.userid,
-                item.type,
-                item.number,
+                item.message,
+                item.informTime,
+                item.status,
                 item.id// 占位符，用于操作列
 
 
@@ -141,16 +143,16 @@ export default {
         },
         async initializeDataTable() {
             console.log("initializeDataTable");
-            var carlist2d = null;
+            var informlist2d = null;
             try {
                 if (!$.fn.DataTable.isDataTable('#example115')) {
 
 
                     try {
-                        const promise = await axios.get('http://localhost:8086/car/');
+                        const promise = await axios.get('http://localhost:8086/inform/');
                         if (promise.status === 200) {
                             console.log(promise.data);
-                            carlist2d = this.convertTo2DArray(promise.data);
+                            informlist2d = this.convertTo2DArray(promise.data);
                         } else {
                             console.log(promise);
                             return;
@@ -175,13 +177,14 @@ export default {
                                     }
                                 }, 'print', 'colvis'
                             ],
-                            data: carlist2d,
+                            data: informlist2d,
                             columns: [
                                 { title: '序号' },
-                                { title: '车辆ID' },
-                                { title: '车辆用户ID' },
-                                { title: '车辆类型' },
-                                { title: '车牌号' },
+                                { title: '通知ID' },
+                                { title: '用户ID' },
+                                { title: '通知内容' },
+                                { title: '通知时间' },
+                                { title: '状态' },
                                 {
                                     title: '操作',
                                     render: function (data) {
@@ -209,14 +212,14 @@ export default {
                         $('#example115 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
-                            console.log('数据:', this.initialcar);
-                            axios.get('http://localhost:8086/car/' + data).then(res => {
-                                this.initialcar = res.data;
+                            console.log('数据:', this.initialinform);
+                            axios.get('http://localhost:8086/inform/' + data).then(res => {
+                                this.initialinform = res.data;
                             });
 
                         });
                         $('#example115 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
-                            axios.delete('http://localhost:8086/car/' + $(event.currentTarget).val()).then(res => {
+                            axios.delete('http://localhost:8086/inform/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
                                     alert('删除成功');

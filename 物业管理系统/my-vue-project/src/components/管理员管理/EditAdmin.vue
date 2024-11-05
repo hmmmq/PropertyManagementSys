@@ -4,44 +4,47 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">业主信息管理</h4>
+                    <h4 class="page-title">管理员信息管理</h4>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">用户管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">新增业主信息</li>
+                        <li class="breadcrumb-item">管理员管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">修改管理员信息</li>
                     </ol>
                 </div>
             </div>
+            <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
+                @click="cancel">取消修改</button>
             <!-- End Breadcrumb-->
             <div class="row justify-content-center">
                 <div class="card col-lg-12">
                     <div class="card-body">
-                        <div class="card-title text-primary">新增用户</div>
+                        <div class="card-title text-primary">修改管理员</div>
                         <hr>
                         <form>
                             <div class="form-group">
-                                <label>用户ID(作为登录账号使用)</label>
-                                <input type="number" class="form-control" placeholder="请填写用户ID" v-model="user.id">
+                                <label>管理员ID(作为登录账号使用)</label>
+                                <input type="number" class="form-control" placeholder="请填写管理员ID" v-model="admin.id"
+                                    disabled>
                             </div>
                             <div class="form-group">
-                                <label>用户密码</label>
-                                <input type="text" class="form-control" placeholder="填写用户密码" v-model="user.password">
+                                <label>管理员密码</label>
+                                <input type="text" class="form-control" placeholder="填写管理员密码" v-model="admin.password">
                             </div>
                             <div class="form-group">
-                                <label>用户姓名</label>
-                                <input type="text" class="form-control" placeholder="填写用户姓名" v-model="user.name">
+                                <label>管理员姓名</label>
+                                <input type="text" class="form-control" placeholder="填写管理员姓名" v-model="admin.name">
                             </div>
                             <div class="form-group">
-                                <label>用户手机号</label>
-                                <input type="number" class="form-control" placeholder="填写用户手机号" v-model="user.phone">
+                                <label>管理员手机号</label>
+                                <input type="number" class="form-control" placeholder="填写管理员手机号" v-model="admin.phone">
                             </div>
 
                             <div class="form-group">
-                                <label>用户邮箱</label>
-                                <input type="text" class="form-control" placeholder="填写用户邮箱" v-model="user.email">
+                                <label>管理员邮箱</label>
+                                <input type="text" class="form-control" placeholder="填写管理员邮箱" v-model="admin.email">
                             </div>
                             <div class="form-group">
-                                <label>用户性别</label>
-                                <select class="form-control" v-model="user.gender">
+                                <label>管理员性别</label>
+                                <select class="form-control" v-model="admin.gender">
                                     <option value="男">男</option>
                                     <option value="女">女</option>
                                 </select>
@@ -49,7 +52,7 @@
 
                             <div class="form-group">
                                 <label>是否是管理员</label>
-                                <select class="form-control" v-model="user.type">
+                                <select class="form-control" v-model="admin.type">
                                     <option value="true">是</option>
                                     <option value="false">否</option>
                                 </select>
@@ -76,27 +79,35 @@
 <script scoped>
 import axios from 'axios';
 export default {
+    props: {
+        initialadmin: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             // data
-            user: {
-                id: '',
-                password: '',
-                name: '',
-                age: '',
-                position: '',
-                phone: '',
-                email: '',
-                gender: '',
-                type: false
+            admin: {
+                id: this.initialadmin.id || '',
+                password: this.initialadmin.password || '',
+                name: this.initialadmin.name || '',
+                age: this.initialadmin.age || '',
+                phone: this.initialadmin.phone || '',
+                email: this.initialadmin.email || '',
+                gender: this.initialadmin.gender || '',
+                type: this.initialadmin.type || true
             },
-            URL: 'http://localhost:8086/user/'
+            URL: 'http://localhost:8086/admin/'
         }
     },
     methods: {
+        cancel() {
+            this.$emit('data-back-admin', true);
+        },
         checknullvalue() {
-            if (this.user.password == '' || this.user.name == '' ||
-                this.user.phone == '' || this.user.email == '' || this.user.id == '' || this.user.gender == '') {
+            if (this.admin.password == '' || this.admin.name == '' ||
+                this.admin.phone == '' || this.admin.email == '' || this.admin.id == '' || this.admin.gender == '') {
                 alert('请填写完整信息');
                 return false;
             }
@@ -109,27 +120,25 @@ export default {
                 return;
             }
             // register
-            // console.log('register');
-            // console.log(this.user);
-            axios.post(this.URL, this.user).then(res => {
-                // console.log(res);
+            this.URL = this.URL + this.admin.id;
+
+            axios.put(this.URL, this.admin).then(res => {
                 if (res.data != '' && res.data == true) {
-                    // console.log(res.data);
-                    // this.$router.push('/user/list');
-                    alert('新增用户成功');
-                    this.user = {
+                    alert('修改管理员成功');
+                    this.admin = {
                         id: '',
                         password: '',
                         name: '',
                         age: '',
-                        position: '',
                         phone: '',
                         email: '',
                         gender: '',
-                        type: false
+                        type: true
                     };
+                    this.$emit('data-back-admin', true);
+
                 } else {
-                    alert('新增用户失败,请检查用户ID是否已存在');
+                    alert('修改管理员失败,请检查管理员ID是否已存在');
                 }
             }).catch(err => {
                 console.error(err);

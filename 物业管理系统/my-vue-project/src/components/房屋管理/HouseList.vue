@@ -4,40 +4,39 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">车辆管理</h4>
+                    <h4 class="page-title">房屋管理</h4>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">车位管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">车辆管理</li>
+                        <li class="breadcrumb-item">房屋管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">房屋管理</li>
                     </ol>
                 </div>
-
             </div>
             <!-- End Breadcrumb-->
             <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                @click="addcar = true">登记车辆</button>
+                @click="addhouse = true">新增房屋</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
-            <edit-car :initialcar="initialcar" v-if="this.initialcar.id != ''"
-                @data-back-car="handleDataBack"></edit-car>
-
+            <edit-house :initialhouse="initialhouse" v-if="this.initialhouse.id != ''"
+                @data-back-house="handleDataBack"></edit-house>
             <div class="row">
-                <div class="col-lg-10" style="align-items: center;" v-show="addcar">
+                <div class="col-lg-10" style="align-items: center;" v-show="addhouse">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                        @click="addcar = false">收起面板</button>
-                    <AddUserCar></AddUserCar>
+                        @click="addhouse = false">收起面板</button>
+                    <AddHouse></AddHouse>
                 </div>
             </div>
-
-
 
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header"><i class="fa fa-table"></i>车辆列表</div>
+
+                        <div class="card-header"><i class="fa fa-table"></i>房屋列表</div>
                         <div class="card-body">
 
                             <div class="table-responsive">
-                                <table id="example114" class="table table-bordered">
+                                <div id="example_wrapper"></div>
+                                <table id="example111" class="table table-bordered">
+
                                 </table>
                             </div>
                         </div>
@@ -50,8 +49,10 @@
 
     </div>
 </template>
+
 <script scoped>
 import axios from 'axios';
+import AddHouse from './AddHouse.vue';
 import $ from 'jquery';
 import 'datatables.net-bs4';
 import 'datatables.net-buttons-bs4';
@@ -61,8 +62,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
-import AddUserCar from './AddUserCar.vue';
-import EditCar from './EditCar.vue';
+import EditHouse from './EditHouse.vue';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
     Roboto: {
@@ -81,23 +81,24 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        AddUserCar,
-        EditCar
-
+        AddHouse,
+        EditHouse
     },
     data() {
         return {
             user: null,
-            addcar: false,
-            addacar: false,
-            carlist: [], // 初始化为空数组
+            addhouse: false,
+            addahouse: false,
+            houselist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
-            initialcar: {
+            initialhouse: {
                 id: '',
-                userid: '',
+                ownerid: '',
                 type: '',
-                number: ''
+                area: '',
+                address: '',
+                status: ''
             }
         }
     },
@@ -109,7 +110,7 @@ export default {
             console.log('回传的数据:', data);
             // 处理回传的数据
             if (data) {
-                this.initialcar.id = '';
+                this.initialhouse.id = '';
             }
         },
         async updatelist() {
@@ -119,10 +120,10 @@ export default {
         },
         fetchData() {
             try {
-                const res = axios.get('http://localhost:8086/car/user/' + this.user.id);
+                const res = axios.get('http://localhost:8086/house/');
                 if (res.status === 200) {
-                    console.log('http://localhost:8086/car/');
-                    console.log('this.carlist = res.data;');
+                    console.log('http://localhost:8086/house/');
+                    console.log('this.houselist = res.data;');
                 }
             } catch (err) {
                 console.error(err);
@@ -132,9 +133,11 @@ export default {
             return data.map((item, index) => [
                 index + 1, // 添加索引列
                 item.id,
-                item.userid,
+                item.ownerid,
                 item.type,
-                item.number,
+                item.area,
+                item.address,
+                item.status,
                 item.id// 占位符，用于操作列
 
 
@@ -142,18 +145,16 @@ export default {
         },
         async initializeDataTable() {
             console.log("initializeDataTable");
-            var carlist2d = null;
+            var houselist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example114')) {
-                    this.user = JSON.parse(localStorage.getItem('user'));
-
+                if (!$.fn.DataTable.isDataTable('#example111')) {
 
 
                     try {
-                        const promise = await axios.get('http://localhost:8086/car/user/' + this.user.id)
+                        const promise = await axios.get('http://localhost:8086/house/');
                         if (promise.status === 200) {
                             console.log(promise.data);
-                            carlist2d = this.convertTo2DArray(promise.data);
+                            houselist2d = this.convertTo2DArray(promise.data);
                         } else {
                             console.log(promise);
                             return;
@@ -164,8 +165,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example114').DataTable({");
-                        var table = $('#example114').DataTable({
+                        console.log(" var table = $('#example111').DataTable({");
+                        var table = $('#example111').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -178,13 +179,15 @@ export default {
                                     }
                                 }, 'print', 'colvis'
                             ],
-                            data: carlist2d,
+                            data: houselist2d,
                             columns: [
                                 { title: '序号' },
-                                { title: '车辆ID' },
-                                { title: '车辆用户ID' },
-                                { title: '车辆类型' },
-                                { title: '车牌号' },
+                                { title: '房屋ID' },
+                                { title: '房主ID' },
+                                { title: '类型' },
+                                { title: '面积' },
+                                { title: '地址' },
+                                { title: '状态' },
                                 {
                                     title: '操作',
                                     render: function (data) {
@@ -209,17 +212,18 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example114 tbody').on('click', '.edit-btn', (event) => {
+                        $('#example111 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
-                            console.log('数据:', this.initialcar);
-                            axios.get('http://localhost:8086/car/' + data).then(res => {
-                                this.initialcar = res.data;
+                            console.log('数据:', this.initialhouse);
+                            axios.get('http://localhost:8086/house/' + data).then(res => {
+                                this.initialhouse = res.data;
                             });
 
                         });
-                        $('#example114 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
-                            axios.delete('http://localhost:8086/car/' + $(event.currentTarget).val()).then(res => {
+
+                        $('#example111 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/house/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
                                     alert('删除成功');
@@ -265,9 +269,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example114')) {
+                if ($.fn.DataTable.isDataTable('#example111')) {
                     console.log("destoryDataTable");
-                    $('#example114').DataTable().destroy();
+                    $('#example111').DataTable().destroy();
                 }
             });
         }

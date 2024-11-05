@@ -4,36 +4,39 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">房屋管理</h4>
+                    <h4 class="page-title">管理员信息管理</h4>
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">房屋管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">房屋管理</li>
+                        <li class="breadcrumb-item">管理员管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">管理员信息管理</li>
                     </ol>
                 </div>
+
             </div>
             <!-- End Breadcrumb-->
             <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                @click="addhouse = true">新增房屋</button>
+                @click="addaadmin = true">新增管理员信息</button>
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
+            <edit-admin :initialadmin="initialadmin" v-if="this.initialadmin.id != ''"
+                @data-back-admin="handleDataBack"></edit-admin>
             <div class="row">
-                <div class="col-lg-10" style="align-items: center;" v-show="addhouse">
+                <div class="col-lg-10" style="align-items: center;" v-show="addaadmin">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                        @click="addhouse = false">收起面板</button>
-                    <AddHouse></AddHouse>
+                        @click="addaadmin = false">收起面板</button>
+                    <AddAdmin></AddAdmin>
                 </div>
             </div>
+
+
 
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-
-                        <div class="card-header"><i class="fa fa-table"></i>房屋列表</div>
+                        <div class="card-header"><i class="fa fa-table"></i>管理员列表</div>
                         <div class="card-body">
 
                             <div class="table-responsive">
-                                <div id="example_wrapper"></div>
-                                <table id="example118" class="table table-bordered">
+                                <table id="example9" class="table table-bordered">
 
                                 </table>
                             </div>
@@ -47,10 +50,8 @@
 
     </div>
 </template>
-
 <script scoped>
 import axios from 'axios';
-import AddHouse from './AddHouse.vue';
 import $ from 'jquery';
 import 'datatables.net-bs4';
 import 'datatables.net-buttons-bs4';
@@ -60,6 +61,8 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
+import AddAdmin from './AddAdmin.vue';
+import EditAdmin from './EditAdmin.vue';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
@@ -79,22 +82,40 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        AddHouse
+        AddAdmin,
+        EditAdmin
     },
     data() {
         return {
-            user: null,
-            addhouse: false,
-            addahouse: false,
-            houselist: [], // 初始化为空数组
+            admin: null,
+            addadmin: false,
+            addaadmin: false,
+            adminlist: [], // 初始化为空数组
             ready: false, // 初始化为 false,
             update: false,
+            initialadmin: {
+                id: '',
+                name: '',
+                phone: '',
+                age: '',
+                email: '',
+                gender: '',
+                password: '',
+                type: ''
+            }
         }
     },
-    
+
     watch: {
     },
     methods: {
+        handleDataBack(data) {
+            console.log('回传的数据:', data);
+            // 处理回传的数据
+            if (data) {
+                this.initialadmin.id = '';
+            }
+        },
         async updatelist() {
             await this.destoryDataTable();
             this.initializeDataTable();
@@ -102,10 +123,10 @@ export default {
         },
         fetchData() {
             try {
-                const res = axios.get('http://localhost:8086/house/');
+                const res = axios.get('http://localhost:8086/admin/');
                 if (res.status === 200) {
-                    console.log('http://localhost:8086/house/');
-                    console.log('this.houselist = res.data;');
+                    console.log('http://localhost:8086/admin/');
+                    console.log('this.adminlist = res.data;');
                 }
             } catch (err) {
                 console.error(err);
@@ -115,28 +136,25 @@ export default {
             return data.map((item, index) => [
                 index + 1, // 添加索引列
                 item.id,
-                item.ownerid,
-                item.type,
-                item.area,
-                item.address,
-                item.status,
+                item.name,
+                item.phone,
+                item.email,
+                item.gender,
                 item.id// 占位符，用于操作列
-
-
             ]);
         },
         async initializeDataTable() {
             console.log("initializeDataTable");
-            var houselist2d = null;
+            var adminlist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example118')) {
+                if (!$.fn.DataTable.isDataTable('#example9')) {
 
 
                     try {
-                        const promise = await axios.get('http://localhost:8086/house/');
+                        const promise = await axios.get('http://localhost:8086/admin/');
                         if (promise.status === 200) {
                             console.log(promise.data);
-                            houselist2d = this.convertTo2DArray(promise.data);
+                            adminlist2d = this.convertTo2DArray(promise.data);
                         } else {
                             console.log(promise);
                             return;
@@ -147,8 +165,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example118').DataTable({");
-                        var table = $('#example118').DataTable({
+                        console.log(" var table = $('#example9').DataTable({");
+                        var table = $('#example9').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -161,20 +179,19 @@ export default {
                                     }
                                 }, 'print', 'colvis'
                             ],
-                            data: houselist2d,
+                            data: adminlist2d,
                             columns: [
                                 { title: '序号' },
-                                { title: '房屋ID' },
-                                { title: '房主ID' },
-                                { title: '类型' },
-                                { title: '面积' },
-                                { title: '地址' },
-                                { title: '状态' },
+                                { title: '管理员ID' },
+                                { title: '管理员姓名' },
+                                { title: '管理员手机号' },
+                                { title: '管理员邮箱' },
+                                { title: '管理员性别' },
                                 {
                                     title: '操作',
                                     render: function (data) {
                                         return `
-                                         <button class="edit-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>编辑</button>
+                                        <button class="edit-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>编辑</button>
                                         <button class="delete-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>删除</button>
                                         `;
                                     }
@@ -194,17 +211,26 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example118 tbody').on('click', '.edit-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
+                        $('#example9 tbody').on('click', '.edit-btn', (event) => {
+                            var data = $(event.currentTarget).val();
+                            console.log('编辑数据:', data);
+                            console.log('数据:', this.initialadmin);
+                            axios.get('http://localhost:8086/admin/' + data).then(res => {
+                                this.initialadmin = res.data;
+                            });
 
-                            // 在这里添加编辑逻辑
                         });
 
-                        $('#example118 tbody').on('click', '.delete-btn', function () {
-                            var id = $(this).val();
-                            console.log(id);
-                            // 在这里添加删除逻辑
+
+                        $('#example9 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/admin/' + $(event.currentTarget).val()).then(res => {
+                                if (res.data) {
+                                    console.log('删除成功');
+                                    alert('删除成功');
+                                } else {
+                                    console.error('删除失败');
+                                }
+                            });
                         });
                         console.log("table.buttons().container().appendTo(#example_wrapper.col-md-6:eq(0));");
                         table
@@ -243,9 +269,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example118')) {
+                if ($.fn.DataTable.isDataTable('#example9')) {
                     console.log("destoryDataTable");
-                    $('#example118').DataTable().destroy();
+                    $('#example9').DataTable().destroy();
                 }
             });
         }
