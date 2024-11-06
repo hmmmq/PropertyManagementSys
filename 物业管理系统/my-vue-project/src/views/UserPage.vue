@@ -14,6 +14,8 @@
         <ParkList v-show="currentComponent === 'ParkList'"></ParkList>
         <ContractList v-show="currentComponent === 'ContractList'"></ContractList>
         <InformList v-show="currentComponent === 'InformList'"></InformList>
+        <HistoryHouseList v-show="currentComponent === 'HistoryHouseList'"></HistoryHouseList>
+        <HistoryParkList v-show="currentComponent === 'HistoryParkList'"></HistoryParkList>
     </div>
 
 </template>
@@ -32,6 +34,8 @@ import AdminList from '@/components/管理员管理/AdminList.vue';
 import ParkList from '@/components/车位管理/ParkList.vue';
 import ContractList from '@/components/合同管理/ContractList.vue';
 import InformList from '@/components/通知管理/InformList.vue';
+import HistoryHouseList from '@/components/住房历史管理/HouseList.vue';
+import HistoryParkList from '@/components/车位历史记录/ParkList.vue';
 export default {
     components: {
         SideNav,
@@ -47,7 +51,9 @@ export default {
         AdminList,
         ParkList,
         ContractList,
-        InformList
+        InformList,
+        HistoryHouseList,
+        HistoryParkList
     },
     data() {
         return {
@@ -73,6 +79,9 @@ export default {
                 case '房屋信息管理':
                     this.currentComponent = 'HouseList';
                     break;
+                case '住房历史管理':
+                    this.currentComponent = 'HistoryHouseList';
+                    break;
                 case '合同与租赁管理':
                     this.currentComponent = 'ContractList';
                     break;
@@ -87,6 +96,9 @@ export default {
                     break;
                 case '车位管理':
                     this.currentComponent = 'ParkList';
+                    break;
+                case '车位历史管理':
+                    this.currentComponent = 'HistoryParkList';
                     break;
                 case '我的车辆':
                     this.currentComponent = 'UserCarList';

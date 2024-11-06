@@ -29,4 +29,8 @@ public class House implements Serializable {
     private String address;
 
     private String status;
+
+    private String enterTime;
+
+    private String leaveTime;
 }

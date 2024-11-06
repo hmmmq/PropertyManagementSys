@@ -51,6 +51,8 @@
                     </li>
                     <li><a href="#" @click="selectOption('车位管理')"><i class="zmdi zmdi-star-outline"></i>车位管理</a>
                     </li>
+                    <li><a href="#" @click="selectOption('车位历史管理')"><i class="zmdi zmdi-star-outline"></i>车位历史管理</a>
+                    </li>
 
                 </ul>
             </li>

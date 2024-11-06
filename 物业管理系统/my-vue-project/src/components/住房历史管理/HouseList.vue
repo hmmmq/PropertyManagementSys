@@ -15,7 +15,8 @@
 
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
-
+            <edit-house :initialhouse="initialhouse" v-if="this.initialhouse.id != ''"
+                @data-back-house="handleDataBack"></edit-house>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -26,7 +27,7 @@
 
                             <div class="table-responsive">
                                 <div id="example_wrapper"></div>
-                                <table id="example118" class="table table-bordered">
+                                <table id="example1111" class="table table-bordered">
 
                                 </table>
                             </div>
@@ -52,8 +53,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
-
-
+import EditHouse from './EditHouse.vue';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
     Roboto: {
@@ -73,6 +73,7 @@ pdfMake.fonts = {
 export default {
     components: {
 
+        EditHouse
     },
     data() {
         return {
@@ -88,7 +89,9 @@ export default {
                 type: '',
                 area: '',
                 address: '',
-                status: ''
+                status: '',
+                enterTime: '',
+                leaveTime: ''
             }
         }
     },
@@ -128,7 +131,9 @@ export default {
                 item.area,
                 item.address,
                 item.status,
-
+                item.enterTime,
+                item.leaveTime,
+                item.id// 占位符，用于操作列
 
 
             ]);
@@ -137,10 +142,11 @@ export default {
             console.log("initializeDataTable");
             var houselist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example118')) {
-                    this.user = JSON.parse(localStorage.getItem('user'));
+                if (!$.fn.DataTable.isDataTable('#example1111')) {
+
+
                     try {
-                        const promise = await axios.get('http://localhost:8086/house/user/' + this.user.id);
+                        const promise = await axios.get('http://localhost:8086/house/');
                         if (promise.status === 200) {
                             console.log(promise.data);
                             houselist2d = this.convertTo2DArray(promise.data);
@@ -154,8 +160,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example118').DataTable({");
-                        var table = $('#example118').DataTable({
+                        console.log(" var table = $('#example1111').DataTable({");
+                        var table = $('#example1111').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -177,7 +183,17 @@ export default {
                                 { title: '面积' },
                                 { title: '地址' },
                                 { title: '状态' },
-
+                                { title: '入住时间' },
+                                { title: '离开时间' },
+                                {
+                                    title: '操作',
+                                    render: function (data) {
+                                        return `
+                                         <button class="edit-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>编辑</button>
+                                        <button class="delete-btn btn btn-outline-primary buttons-copy buttons-html5" value=${data}>删除</button>
+                                        `;
+                                    }
+                                }
                             ],
                             language: {
                                 search: "搜索:",
@@ -192,7 +208,27 @@ export default {
                             }
                         });
 
+                        // 绑定编辑和删除按钮的事件
+                        $('#example1111 tbody').on('click', '.edit-btn', (event) => {
+                            var data = $(event.currentTarget).val();
+                            console.log('编辑数据:', data);
+                            console.log('数据:', this.initialhouse);
+                            axios.get('http://localhost:8086/house/' + data).then(res => {
+                                this.initialhouse = res.data;
+                            });
 
+                        });
+
+                        $('#example1111 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                            axios.delete('http://localhost:8086/house/' + $(event.currentTarget).val()).then(res => {
+                                if (res.data) {
+                                    console.log('删除成功');
+                                    alert('删除成功');
+                                } else {
+                                    console.error('删除失败');
+                                }
+                            });
+                        });
                         console.log("table.buttons().container().appendTo(#example_wrapper.col-md-6:eq(0));");
                         table
                             .buttons()
@@ -230,9 +266,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example118')) {
+                if ($.fn.DataTable.isDataTable('#example1111')) {
                     console.log("destoryDataTable");
-                    $('#example118').DataTable().destroy();
+                    $('#example1111').DataTable().destroy();
                 }
             });
         }
