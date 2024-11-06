@@ -47,7 +47,7 @@ export default {
             park: {
                 id: '',
                 carid: '',
-                reserveTime: '',
+                createTime: '',
                 username: '',
                 userid: '',
                 status: '未被预约'
@@ -77,7 +77,7 @@ export default {
                     this.park = {
                         id: '',
                         carid: '',
-                        reserveTime: '',
+                        createTime: '',
                         username: '',
                         userid: '',
                         status: '未被预约'

@@ -22,7 +22,8 @@
                         <form>
                             <div class="form-group">
                                 <label>车位ID</label>
-                                <input type="number" class="form-control" placeholder="请填写车位ID" v-model="park.id">
+                                <input type="number" class="form-control" placeholder="请填写车位ID" v-model="park.id"
+                                    disabled>
                             </div>
                             <div class="form-group">
                                 <label>车位车主ID</label>
@@ -67,7 +68,7 @@ export default {
             park: {
                 id: this.initialpark.id || '',
                 carid: this.initialpark.carid || '',
-                reserveTime: this.initialpark.reserveTime || '',
+                createTime: this.initialpark.createTime || '',
                 username: this.username || '',
                 userid: this.userid || '',
                 status: this.status || '未被预约'

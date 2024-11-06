@@ -11,7 +11,7 @@
         <FixList v-show="currentComponent === 'FixList'"></FixList>
         <UserList v-show="currentComponent === 'UserList'"></UserList>
         <AdminList v-show="currentComponent === 'AdminList'"></AdminList>
-
+        <ParkList v-show="currentComponent === 'ParkList'"></ParkList>
     </div>
 
 </template>
@@ -27,6 +27,7 @@ import FixList from '@/components/物业报修/FixList.vue';
 import UserList from '@/components/用户管理/管理员端/UserList.vue';
 import UserFixList from '@/components/物业报修/UserFixList.vue';
 import AdminList from '@/components/管理员管理/AdminList.vue';
+import ParkList from '@/components/车位管理/ParkList.vue';
 export default {
     components: {
         SideNav,
@@ -39,11 +40,11 @@ export default {
         CarList,
         FixList,
         UserFixList,
-        AdminList
+        AdminList,
+        ParkList
     },
     data() {
         return {
-
             currentComponent: 'WelcomePanel'
         }
     },
@@ -71,6 +72,9 @@ export default {
                     break;
                 case '车辆管理':
                     this.currentComponent = 'CarList';
+                    break;
+                case '车位管理':
+                    this.currentComponent = 'ParkList';
                     break;
                 case '我的车辆':
                     this.currentComponent = 'UserCarList';

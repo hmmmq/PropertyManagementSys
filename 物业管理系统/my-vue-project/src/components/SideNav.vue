@@ -4,11 +4,8 @@
         <div class="brand-logo">
             <a href="index.html">
                 <img src="http://127.0.0.1:8083/images/logo-icon.png" class="logo-icon" alt="logo icon">
-
                 <h5 class="logo-text" v-if="user?.type">管理员</h5>
-
                 <h5 class="logo-text" v-else>普通用户</h5>
-
             </a>
         </div>
         <ul class="sidebar-menu do-nicescrol">
@@ -28,7 +25,6 @@
                             住房历史管理</a>
                     </li>
                 </ul>
-
             </li>
 
             <li v-if="user?.type">
@@ -50,7 +46,7 @@
                 <ul class="sidebar-submenu">
                     <li><a href="#" @click="selectOption('车辆管理')"><i class="zmdi zmdi-star-outline"></i>车辆管理</a>
                     </li>
-                    <li><a href="#" @click="selectOption('车辆管理')"><i class="zmdi zmdi-star-outline"></i>车辆管理</a>
+                    <li><a href="#" @click="selectOption('车位管理')"><i class="zmdi zmdi-star-outline"></i>车位管理</a>
                     </li>
 
                 </ul>

@@ -23,7 +23,7 @@
                 <div class="col-lg-10" style="align-items: center;" v-show="addpark">
                     <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
                         @click="addpark = false">收起面板</button>
-                    <AddUserpark></AddUserpark>
+                    <AddUserPark></AddUserPark>
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                         <div class="parkd-body">
 
                             <div class="table-responsive">
-                                <table id="example115" class="table table-bordered">
+                                <table id="example1151" class="table table-bordered">
                                 </table>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ import 'datatables.net-buttons/js/buttons.colVis';
 import 'jszip';
 import pdfMake from 'pdfmake-support-chinese-fonts/pdfmake.min';
 import pdfFonts from 'pdfmake-support-chinese-fonts/vfs_fonts';
-import AddUserpark from './AddPark.vue';
+import AddUserPark from './AddPark.vue';
 import parkEdit from './EditPark.vue';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 pdfMake.fonts = {
@@ -80,7 +80,7 @@ pdfMake.fonts = {
 
 export default {
     components: {
-        AddUserpark,
+        AddUserPark,
         parkEdit
     },
     data() {
@@ -94,7 +94,7 @@ export default {
             initialpark: {
                 id: '',
                 carid: '',
-                reserveTime: '',
+                createTime: '',
                 username: '',
                 userid: '',
                 status: '未被预约'
@@ -127,18 +127,13 @@ export default {
                 console.error(err);
             }
         },
-        //         id: '',
-        //         carid: '',
-        //         reserveTime: '',
-        //         username: '',
-        //         userid: '',
-        //         status: '未被预约'
+
         convertTo2DArray(data) {
             return data.map((item, index) => [
                 index + 1, // 添加索引列
                 item.id,
                 item.carid,
-                item.reserveTime,
+                item.createTime,
                 item.username,
                 item.userid,
                 item.status,
@@ -151,7 +146,7 @@ export default {
             console.log("initializeDataTable");
             var parklist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example115')) {
+                if (!$.fn.DataTable.isDataTable('#example1151')) {
 
 
                     try {
@@ -169,8 +164,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example115').DataTable({");
-                        var table = $('#example115').DataTable({
+                        console.log(" var table = $('#example1151').DataTable({");
+                        var table = $('#example1151').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -188,7 +183,7 @@ export default {
                                 { title: '序号' },
                                 { title: '车位ID' },
                                 { title: '车位车牌ID' },
-                                { title: '预约时间' },
+                                { title: '创建时间' },
                                 { title: '车主姓名' },
                                 { title: '车主ID' },
                                 { title: '状态' },
@@ -216,7 +211,7 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example115 tbody').on('click', '.edit-btn', (event) => {
+                        $('#example1151 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
                             console.log('数据:', this.initialpark);
@@ -225,7 +220,7 @@ export default {
                             });
 
                         });
-                        $('#example115 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                        $('#example1151 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
                             axios.delete('http://localhost:8086/park/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
@@ -272,9 +267,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example115')) {
+                if ($.fn.DataTable.isDataTable('#example1151')) {
                     console.log("destoryDataTable");
-                    $('#example115').DataTable().destroy();
+                    $('#example1151').DataTable().destroy();
                 }
             });
         }

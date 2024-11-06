@@ -23,7 +23,7 @@ public class Park implements Serializable {
 
     private Integer carid;
 
-    private LocalDateTime reserveTime;
+    private LocalDateTime createTime;
 
     private String username;
 
