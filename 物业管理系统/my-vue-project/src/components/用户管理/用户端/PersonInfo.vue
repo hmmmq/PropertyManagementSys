@@ -19,11 +19,17 @@
                             <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
                                 @click="paylist = true">
                                 <span>查看缴费情况</span> </button>
+                            <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
+                                @click="userinformlist = true">
+                                <span>查看通知</span> </button>
                             <button type="button" class="btn btn-outline-warning waves-effect waves-light m-1"
                                 @click="usercarlist = true">
+                                <span>查看车辆</span> </button>
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
+                                @click="userparklist = true">
                                 <span>查看车位</span> </button>
                             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
-                                @click="userUserHouseList = true">查看住房</button>
+                                @click="userhouselist = true">查看住房</button>
                             <button type="button" class="btn btn-outline-dark waves-effect waves-light m-1"
                                 @click="pay = true">充值缴费</button>
                         </div>
@@ -124,14 +130,25 @@
                         <PayList class="col-lg-12"></PayList>
 
                     </div>
+                    <div v-show="userinformlist" class="row">
+                        <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
+                            @click="userinformlist = false">收起面板</button>
+                        <InformList class="col-lg-12"></InformList>
+
+                    </div>
                     <div v-show="usercarlist" class="row">
                         <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
                             @click="usercarlist = false">收起面板</button>
                         <UserCarList class="col-lg-12"></UserCarList>
                     </div>
-                    <div v-show="userUserHouseList" class="row">
+                    <div v-show="userparklist" class="row">
                         <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
-                            @click="userUserHouseList = false">收起面板</button>
+                            @click="userparklist = false">收起面板</button>
+                        <UserParkList class="col-lg-12"></UserParkList>
+                    </div>
+                    <div v-show="userhouselist" class="row">
+                        <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
+                            @click="userhouselist = false">收起面板</button>
 
                         <UserHouseList class="col-lg-12"></UserHouseList>
 
@@ -170,12 +187,16 @@
 import UserCarList from './UserCarList.vue';
 import PayList from './PayList.vue';
 import UserHouseList from './UserHouseList.vue';
+import UserParkList from './UserParkList.vue';
+import InformList from './InformList.vue';
 import axios from 'axios';
 export default {
     components: {
         UserCarList,
         PayList,
-        UserHouseList
+        UserHouseList,
+        UserParkList,
+        InformList
 
     },
     name: 'PersonInfo',
@@ -223,7 +244,9 @@ export default {
             personinfo: false,
             paylist: false,
             usercarlist: false,
-            userUserHouseList: false,
+            userparklist: false,
+            userhouselist: false,
+            userinformlist: false,
             pay: false,
             money: 0
         }

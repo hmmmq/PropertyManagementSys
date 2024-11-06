@@ -60,7 +60,13 @@ public class ParkController {
     @GetMapping("/user/{id}")
     public List<Park> getUserAllParks(@PathVariable Integer id) {
         List<Park> parks = getAllParks();
-        parks.removeIf(park -> !park.getUserid().equals(id));
+        if (null!=parks){
+            // 如果用户预约了,或者车位没人预约,列出来
+            // 如果用户id是-1,列出来
+            // 如果车位有人预约,但是不是当前用户,不列出来
+            parks.removeIf(park -> park.getUserid()!=null&&!park.getUserid().equals(id)&&!park.getUserid().equals(-1));
+        }
+
         return parks;
     }
 }

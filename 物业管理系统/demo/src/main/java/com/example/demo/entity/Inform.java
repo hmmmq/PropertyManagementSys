@@ -21,7 +21,7 @@ public class Inform implements Serializable {
 
     private Integer id;
 
-    private String userid;
+    private Integer userid;
 
     private String message;
 
