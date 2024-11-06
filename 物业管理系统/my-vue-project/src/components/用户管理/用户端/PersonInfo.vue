@@ -225,6 +225,7 @@ export default {
                 if (res.data) {
                     alert("充值成功!");
                     this.pay = false;
+                    localStorage.setItem('user', JSON.stringify(this.user));
                 } else {
                     alert("充值失败.");
 
@@ -237,6 +238,8 @@ export default {
                 if (res.data) {
                     alert("保存成功!");
                     this.change = false;
+                    localStorage.setItem('user', JSON.stringify(this.user));
+
                 } else {
                     alert("保存失败.");
 
@@ -245,7 +248,14 @@ export default {
         },
         updateperson() {
             console.log('User get from localStorage in PersonInfo:', this.user);
-            this.user = JSON.parse(localStorage.getItem('user'));
+            axios.get("http://localhost:8086/user/" + this.user.id).then(res => {
+                if (res.data) {
+                    this.user = res.data;
+                    localStorage.setItem('user', JSON.stringify(this.user));
+                } else {
+                    alert("获取用户信息失败.");
+                }
+            });
         }
     },
     data() {
