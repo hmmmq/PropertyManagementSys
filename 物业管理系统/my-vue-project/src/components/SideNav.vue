@@ -35,9 +35,12 @@
                 <ul class="sidebar-submenu">
                     <li><a href="#" @click="selectOption('收费执行')"><i class="zmdi zmdi-star-outline"></i>收费执行</a>
                     </li>
-
-
+                    <li><a href="#" @click="selectOption('通知管理')"><i class="zmdi zmdi-star-outline"></i>通知管理</a>
+                    </li>
                 </ul>
+
+
+
             </li>
             <li v-if="user?.type">
                 <a href="#" class="waves-effect">
@@ -94,42 +97,6 @@
                             业主中心</a></li>
 
                 </ul>
-            </li>
-            <li v-if="user?.type">
-                <a href="#" class="waves-effect">
-                    <i class="zmdi zmdi-card-travel"></i><span>访客管理</span>
-                    <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li><a href="#" @click="selectOption('访客登记')"><i class="zmdi zmdi-star-outline"></i>
-                            访客登记</a>
-                    </li>
-                    <li><a href="#" @click="selectOption('访客离开与历史记录')"><i class="zmdi zmdi-star-outline"></i>
-                            访客离开与历史记录</a>
-                    </li>
-                    <li v-if="user?.type" @click="selectOption('处理结果反馈')"><a href="#"><i
-                                class="zmdi zmdi-star-outline"></i> 处理结果反馈</a>
-                    </li>
-
-                </ul>
-
-            </li>
-            <li>
-                <a href="#" class="waves-effect">
-                    <i class="zmdi zmdi-gamepad"></i><span>投诉建议</span><i class="fa fa-angle-left float-right"></i>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li v-if="!user?.type"><a href="#" @click="selectOption('投诉与建议提交')"><i
-                                class="zmdi zmdi-star-outline"></i>投诉与建议提交</a>
-                    </li>
-                    <li v-if="user?.type"><a href="#" @click="selectOption('投诉与建议处理')"><i
-                                class="zmdi zmdi-star-outline"></i>投诉与建议处理</a>
-                    </li>
-                    <li v-if="!user?.type"><a href="#" @click="selectOption('处理结果反馈')"><i
-                                class="zmdi zmdi-star-outline"></i>处理结果反馈</a>
-                    </li>
-                </ul>
-
             </li>
 
 

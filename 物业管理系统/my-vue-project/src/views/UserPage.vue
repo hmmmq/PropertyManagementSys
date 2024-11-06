@@ -13,6 +13,7 @@
         <AdminList v-show="currentComponent === 'AdminList'"></AdminList>
         <ParkList v-show="currentComponent === 'ParkList'"></ParkList>
         <ContractList v-show="currentComponent === 'ContractList'"></ContractList>
+        <InformList v-show="currentComponent === 'InformList'"></InformList>
     </div>
 
 </template>
@@ -30,6 +31,7 @@ import UserFixList from '@/components/物业报修/UserFixList.vue';
 import AdminList from '@/components/管理员管理/AdminList.vue';
 import ParkList from '@/components/车位管理/ParkList.vue';
 import ContractList from '@/components/合同管理/ContractList.vue';
+import InformList from '@/components/通知管理/InformList.vue';
 export default {
     components: {
         SideNav,
@@ -44,7 +46,8 @@ export default {
         UserFixList,
         AdminList,
         ParkList,
-        ContractList
+        ContractList,
+        InformList
     },
     data() {
         return {
@@ -60,6 +63,9 @@ export default {
                     break;
                 case '管理员信息管理':
                     this.currentComponent = 'AdminList';
+                    break;
+                case '通知管理':
+                    this.currentComponent = 'InformList';
                     break;
                 case '业主中心':
                     this.currentComponent = 'PersonInfo';
