@@ -30,16 +30,11 @@
                                 <label>合同名称</label>
                                 <input type="text" class="form-control" placeholder="合同名称" v-model="contract.name">
                             </div>
-
-
-
                             <div class="form-group">
                                 <label>签署合同用户ID</label>
                                 <input type="number" class="form-control" placeholder="合同用户ID"
                                     v-model="contract.signUserid">
                             </div>
-
-
                             <div class="form-group">
                                 <label>合同类型</label>
                                 <select class="form-control" v-model="contract.type">

@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 import com.example.demo.entity.Contract;
+import com.example.demo.entity.User;
 import com.example.demo.service.IContractService;
+import com.example.demo.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,14 +21,23 @@ public class ContractController {
 
     @Autowired
     private IContractService contractService;
+    @Autowired
+    private IUserService userService;
 
     // Create a new contract
     @PostMapping
     public boolean createContract(@RequestBody Contract contract) {
+        //查找签署人
+        User user = userService.getById(contract.getSignUserid());
+        if (user == null) {
+            return false;
+        }
+
         Contract temp = getContractById(contract.getId());
         if (temp != null) {
             return false;
         }
+        contract.setSignUsername(user.getName());
         return contractService.save(contract);
     }
 

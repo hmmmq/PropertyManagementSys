@@ -23,6 +23,11 @@
                                 <input type="number" class="form-control" placeholder="请填写合同ID" v-model="contract.id">
                             </div>
                             <div class="form-group">
+                                <label>合同名称</label>
+                                <input type="text" class="form-control" placeholder="合同名称" v-model="contract.name">
+                            </div>
+
+                            <div class="form-group">
                                 <label>合同用户ID</label>
                                 <input type="text" class="form-control" placeholder="合同用户ID"
                                     v-model="contract.signUserid">
@@ -99,7 +104,7 @@ export default {
                         status: '未签署'
                     };
                 } else {
-                    alert('新增合同失败,请检查合同ID是否已存在');
+                    alert('新增合同失败,请检查合同ID是否已存在或者用户ID是否存在');
                 }
             }).catch(err => {
                 console.error(err);
