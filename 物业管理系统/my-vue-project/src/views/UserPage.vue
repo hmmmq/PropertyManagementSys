@@ -10,6 +10,7 @@
         <CarList v-show="currentComponent === 'CarList'"></CarList>
         <FixList v-show="currentComponent === 'FixList'"></FixList>
         <UserList v-show="currentComponent === 'UserList'"></UserList>
+        <AdminList v-show="currentComponent === 'AdminList'"></AdminList>
 
     </div>
 
@@ -18,13 +19,14 @@
 import SideNav from '@/components/SideNav.vue';
 import NavHeader from '@/components/NavHeader.vue';
 import WelcomePanel from '@/components/WelcomePanel.vue';
-import PersonInfo from '@/components/用户管理/PersonInfo.vue';
+import PersonInfo from '@/components/用户管理/用户端/PersonInfo.vue';
 import HouseList from '@/components/房屋管理/HouseList.vue';
 import FeeList from '@/components/收费管理/FeeList.vue';
 import CarList from '@/components/车辆管理/CarList.vue';
 import FixList from '@/components/物业报修/FixList.vue';
-import UserList from '@/components/用户管理/UserList.vue';
+import UserList from '@/components/用户管理/管理员端/UserList.vue';
 import UserFixList from '@/components/物业报修/UserFixList.vue';
+import AdminList from '@/components/管理员管理/AdminList.vue';
 export default {
     components: {
         SideNav,
@@ -36,7 +38,8 @@ export default {
         FeeList,
         CarList,
         FixList,
-        UserFixList
+        UserFixList,
+        AdminList
     },
     data() {
         return {
@@ -50,6 +53,9 @@ export default {
             switch (option) {
                 case '业主信息管理':
                     this.currentComponent = 'UserList';
+                    break;
+                case '管理员信息管理':
+                    this.currentComponent = 'AdminList';
                     break;
                 case '业主中心':
                     this.currentComponent = 'PersonInfo';

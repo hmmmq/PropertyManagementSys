@@ -36,7 +36,7 @@
                         <div class="card-body">
 
                             <div class="table-responsive">
-                                <table id="example9" class="table table-bordered">
+                                <table id="example91" class="table table-bordered">
 
                                 </table>
                             </div>
@@ -147,7 +147,7 @@ export default {
             console.log("initializeDataTable");
             var adminlist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example9')) {
+                if (!$.fn.DataTable.isDataTable('#example91')) {
 
 
                     try {
@@ -165,8 +165,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example9').DataTable({");
-                        var table = $('#example9').DataTable({
+                        console.log(" var table = $('#example91').DataTable({");
+                        var table = $('#example91').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -211,7 +211,7 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example9 tbody').on('click', '.edit-btn', (event) => {
+                        $('#example91 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
                             console.log('数据:', this.initialadmin);
@@ -222,7 +222,7 @@ export default {
                         });
 
 
-                        $('#example9 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                        $('#example91 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
                             axios.delete('http://localhost:8086/admin/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
@@ -269,9 +269,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example9')) {
+                if ($.fn.DataTable.isDataTable('#example91')) {
                     console.log("destoryDataTable");
-                    $('#example9').DataTable().destroy();
+                    $('#example91').DataTable().destroy();
                 }
             });
         }

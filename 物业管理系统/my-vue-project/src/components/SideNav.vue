@@ -89,6 +89,9 @@
                     <li v-if="user?.type"><a href="#" @click="selectOption('业主信息管理')"><i
                                 class="zmdi zmdi-star-outline"></i>
                             业主信息管理</a></li>
+                    <li v-if="user?.type"><a href="#" @click="selectOption('管理员信息管理')"><i
+                                class="zmdi zmdi-star-outline"></i>
+                            管理员信息管理</a></li>
 
                     <li v-if="!user?.type"><a href="#" @click="selectOption('业主中心')"><i
                                 class="zmdi zmdi-star-outline"></i>
