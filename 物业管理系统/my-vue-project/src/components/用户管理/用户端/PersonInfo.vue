@@ -16,10 +16,13 @@
                             <button type="button" @click="personinfo = true"
                                 class="btn btn-outline-primary waves-effect waves-light m-1"><span>查看/修改个人信息</span>
                             </button>
+                            <button type="button" @click="usercontractlist = true"
+                                class="btn btn-outline-warning waves-effect waves-light m-1"><span>查看合同</span>
+                            </button>
                             <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
                                 @click="paylist = true">
                                 <span>查看缴费情况</span> </button>
-                            <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
+                            <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
                                 @click="userinformlist = true">
                                 <span>查看通知</span> </button>
                             <button type="button" class="btn btn-outline-warning waves-effect waves-light m-1"
@@ -130,6 +133,12 @@
                         <PayList class="col-lg-12"></PayList>
 
                     </div>
+                    <div v-show="usercontractlist" class="row">
+                        <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
+                            @click="usercontractlist = false">收起面板</button>
+                        <UserContractList class="col-lg-12"></UserContractList>
+
+                    </div>
                     <div v-show="userinformlist" class="row">
                         <button type="button" class="btn btn-outline-primary waves-effect waves-light m-1"
                             @click="userinformlist = false">收起面板</button>
@@ -189,6 +198,7 @@ import PayList from './PayList.vue';
 import UserHouseList from './UserHouseList.vue';
 import UserParkList from './UserParkList.vue';
 import InformList from './InformList.vue';
+import UserContractList from './ContractList.vue';
 import axios from 'axios';
 export default {
     components: {
@@ -196,7 +206,8 @@ export default {
         PayList,
         UserHouseList,
         UserParkList,
-        InformList
+        InformList,
+        UserContractList
 
     },
     name: 'PersonInfo',
@@ -247,6 +258,7 @@ export default {
             userparklist: false,
             userhouselist: false,
             userinformlist: false,
+            usercontractlist: false,
             pay: false,
             money: 0
         }
