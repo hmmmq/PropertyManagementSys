@@ -36,7 +36,7 @@
                         <div class="informd-body">
 
                             <div class="table-responsive">
-                                <table id="example1153" class="table table-bordered">
+                                <table id="example11531" class="table table-bordered">
                                 </table>
                             </div>
                         </div>
@@ -145,7 +145,7 @@ export default {
             console.log("initializeDataTable");
             var informlist2d = null;
             try {
-                if (!$.fn.DataTable.isDataTable('#example1153')) {
+                if (!$.fn.DataTable.isDataTable('#example11531')) {
 
 
                     try {
@@ -163,8 +163,8 @@ export default {
                     }
 
                     this.$nextTick(() => {
-                        console.log(" var table = $('#example1153').DataTable({");
-                        var table = $('#example1153').DataTable({
+                        console.log(" var table = $('#example11531').DataTable({");
+                        var table = $('#example11531').DataTable({
                             dom: '<"top"l<"row"<"col-sm-6 text-left"f><"col-sm-6 text-right"B>>rt<"bottom"<"row"<"col-sm-12 dt-info-container"i>><"row"<"col-sm-12 dt-paging-container"p>>><"clear">',
                             buttons: [
                                 'copy', 'csv', 'excel', {
@@ -209,7 +209,7 @@ export default {
                         });
 
                         // 绑定编辑和删除按钮的事件
-                        $('#example1153 tbody').on('click', '.edit-btn', (event) => {
+                        $('#example11531 tbody').on('click', '.edit-btn', (event) => {
                             var data = $(event.currentTarget).val();
                             console.log('编辑数据:', data);
                             console.log('数据:', this.initialinform);
@@ -218,7 +218,7 @@ export default {
                             });
 
                         });
-                        $('#example1153 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
+                        $('#example11531 tbody').off('click', '.delete-btn').on('click', '.delete-btn', (event) => {
                             axios.delete('http://localhost:8086/inform/' + $(event.currentTarget).val()).then(res => {
                                 if (res.data) {
                                     console.log('删除成功');
@@ -265,9 +265,9 @@ export default {
         async destoryDataTable() {
 
             this.$nextTick(() => {
-                if ($.fn.DataTable.isDataTable('#example1153')) {
+                if ($.fn.DataTable.isDataTable('#example11531')) {
                     console.log("destoryDataTable");
-                    $('#example1153').DataTable().destroy();
+                    $('#example11531').DataTable().destroy();
                 }
             });
         }
