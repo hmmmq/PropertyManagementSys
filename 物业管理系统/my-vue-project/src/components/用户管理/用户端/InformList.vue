@@ -4,17 +4,15 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">通知管理</h4>
+                    <h4 class="page-title">查看通知</h4>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">通知管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">通知管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">查看通知</li>
                     </ol>
                 </div>
 
             </div>
-            <!-- End Breadcrumb-->
-            <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                @click="addinform = true">登记通知</button>
+
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
 

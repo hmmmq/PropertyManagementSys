@@ -4,17 +4,16 @@
             <!-- Breadcrumb-->
             <div class="row pt-2 pb-2">
                 <div class="col-sm-9">
-                    <h4 class="page-title">合同管理</h4>
+                    <h4 class="page-title">查看合同</h4>
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">合同管理</li>
-                        <li class="breadcrumb-item active" aria-current="page">合同管理</li>
+                        <li class="breadcrumb-item active" aria-current="page">查看合同</li>
                     </ol>
                 </div>
 
             </div>
             <!-- End Breadcrumb-->
-            <button type="button" class="btn btn-outline-success waves-effect waves-light m-1"
-                @click="addcontract = true">登记合同</button>
+
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
 

@@ -50,13 +50,6 @@
                                 </select>
                             </div>
 
-                            <div class="form-group">
-                                <label>是否是管理员</label>
-                                <select class="form-control" v-model="admin.type">
-                                    <option value="true">是</option>
-                                    <option value="false">否</option>
-                                </select>
-                            </div>
 
 
                             <br>
