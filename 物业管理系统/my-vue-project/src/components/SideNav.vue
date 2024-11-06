@@ -20,8 +20,8 @@
                     <li><a href="#" @click="selectOption('房屋信息管理')"> <i class=" zmdi zmdi-star-outline"></i>
                             房屋信息管理</a></li>
                     <li><a href="#" @click="selectOption('合同与租赁管理')"><i class="zmdi zmdi-star-outline"></i>
-                            合同与租赁管理</a>
-                        <a href="#" @click="selectOption('住房历史管理')"><i class="zmdi zmdi-star-outline"></i>
+                            合同与租赁管理</a> </li>
+                    <li><a href="#" @click="selectOption('住房历史管理')"><i class="zmdi zmdi-star-outline"></i>
                             住房历史管理</a>
                     </li>
                 </ul>

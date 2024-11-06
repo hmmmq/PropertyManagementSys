@@ -16,6 +16,7 @@
         <InformList v-show="currentComponent === 'InformList'"></InformList>
         <HistoryHouseList v-show="currentComponent === 'HistoryHouseList'"></HistoryHouseList>
         <HistoryParkList v-show="currentComponent === 'HistoryParkList'"></HistoryParkList>
+        <StatisticsGraph v-show="currentComponent === 'StatisticsGraph'"></StatisticsGraph>
     </div>
 
 </template>
@@ -36,6 +37,7 @@ import ContractList from '@/components/合同管理/ContractList.vue';
 import InformList from '@/components/通知管理/InformList.vue';
 import HistoryHouseList from '@/components/住房历史管理/HouseList.vue';
 import HistoryParkList from '@/components/车位历史记录/ParkList.vue';
+import StatisticsGraph from '@/components/数据统计/StatisticsGraph.vue';
 export default {
     components: {
         SideNav,
@@ -53,7 +55,8 @@ export default {
         ContractList,
         InformList,
         HistoryHouseList,
-        HistoryParkList
+        HistoryParkList,
+        StatisticsGraph
     },
     data() {
         return {
@@ -108,6 +111,9 @@ export default {
                     break;
                 case '我的报修':
                     this.currentComponent = 'UserFixList';
+                    break;
+                case '数据统计':
+                    this.currentComponent = 'StatisticsGraph';
                     break;
                 default:
 

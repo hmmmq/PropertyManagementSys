@@ -30,6 +30,9 @@ public class FixController {
     @PostMapping
     public boolean createFix(@RequestBody Fix fix) {
         User user = userService.getById(fix.getUserid());
+        if (user == null) {
+            return false;
+        }
         fix.setPhone(user.getPhone());
         return fixService.save(fix);
     }
@@ -71,4 +74,6 @@ public class FixController {
     public boolean deleteFix(@PathVariable Integer id) {
         return fixService.removeById(id);
     }
+
+
 }
