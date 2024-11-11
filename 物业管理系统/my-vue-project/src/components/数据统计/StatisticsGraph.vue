@@ -15,16 +15,17 @@
 
             <button type="button" class="btn btn-outline-info waves-effect waves-light m-1"
                 @click="updatelist">刷新列表</button>
-
-            <div class="row">
-                <i class="fa fa-table"></i>已处理的报修VS未处理的报修
-                <div id="total-fix-chart" style="width: 100%; height: 400px;"></div>
+                <div class="row">
+               
+                <div id="total-fix-chart" style="width: 800px; height: 400px;"></div>
             </div>
-            <div class="row">
-                <i class="fa fa-table"></i>报修类型
-                <div id="type-chart" style="width: 100%; height: 400px;"></div>
+                
+           
+          <div class="row">
+              
+                <div id="type-chart" style="width: 800px; height: 400px;"></div>
             </div><!-- End Row-->
-        </div><!-- End Row-->
+          </div><!-- End Row-->
     </div><!-- End Row-->
     <!-- End container-fluid-->
 </template>
@@ -149,4 +150,6 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>
